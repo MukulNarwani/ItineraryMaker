@@ -39,6 +39,7 @@ class Activity(Location):
 # a=Activity('act','act1','act2')
 # b=City('city','city2',loActivity=[a])
 def CityHandler():
+    #handle loading and returning a city
     location = input('location? ')
     googleMapLocation = input('location? ')
     return City(location,googleMapLocation)
@@ -50,7 +51,7 @@ def ActivityHandler():
  
 def model():
     city=CityHandler()
-    if(input('would you like to make an activity?(y/n) ') == 'y'):
+    while(input('would you like to make an activity?(y/n) ') == 'y'):
         activity=ActivityHandler()
         city.append_activity(activity)
     return city
