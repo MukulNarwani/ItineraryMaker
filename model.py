@@ -2,7 +2,7 @@ import mysql.connector
 from mysql.connector import Error
 import pandas as pd
 import abc
-from db import *
+import csv
 
 
 class Location(metaclass=abc.ABCMeta):
@@ -15,45 +15,49 @@ class Location(metaclass=abc.ABCMeta):
     
     
 class City(Location):
-    
+    #TODO CATCH ERRORS
     def __init__(self,location,googleMapLocation,**loActivity):
         super().__init__(location,googleMapLocation)
         if(type(loActivity)==list):
             self.loActivity=loActivity
         else:
             self.loActivity=list()
+            
     def get_csv_line(self):
         return super().get_csv_line()
+    
     def append_activity(self,activity):   
         self.loActivity.append(activity)
-            
-class Activity(Location):
+        
+    @staticmethod
+    def city_from_csv(city_file):
+        with open(city_file,'r') as f:
+            header=f.readline()
+            activites_csv=f.readlines()
+        city_headers=[x.strip() for x in header.split(', ')]
+        print(city_headers)
+        activities=[]
+        for line in activites_csv:
+            if len(line.strip()) > 0:
+                activities.append(Activity.from_csv(line))    
     
+        return City(*city_headers,loActivity=activities)
+                        
+class Activity(Location):
+    #TODO CATCH ERRORS
     def __init__(self,title,googleMapLocation,cost,):
         super().__init__(title,googleMapLocation)
         self.cost=cost
     
     def get_csv_line(self):
         return super().get_csv_line() + f', {self.cost}'
-
-# a=Activity('act','act1','act2')
-# b=City('city','city2',loActivity=[a])
-def CityHandler():
-    #handle loading and returning a city
-    location = input('location? ')
-    googleMapLocation = input('location? ')
-    return City(location,googleMapLocation)
-def ActivityHandler():
-    activity = input('activity title? ')
-    activity_location = input('activity location? ')
-    activity_cost = input('activity cost? ')  
-    return Activity(activity,activity_location,activity_cost)
- 
-def model():
-    city=CityHandler()
-    while(input('would you like to make an activity?(y/n) ') == 'y'):
-        activity=ActivityHandler()
-        city.append_activity(activity)
-    return city
-
-cityCSVSaver(model())
+    @staticmethod
+    def from_csv(csv_line):
+        #Throw catche rrror here
+        line=[x.strip() for x in csv_line.split(', ')]
+        try:
+            return Activity(*line)
+        except Exception as e:
+            print(f'Failed loading {line}')
+            print(e)
+        
