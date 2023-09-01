@@ -1,5 +1,3 @@
-from model import *
-from db import *
 
 def CityHandler():
     
