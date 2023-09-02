@@ -2,44 +2,52 @@ import mysql.connector
 from mysql.connector import Error
 import pandas as pd
 import abc
-import csv
+from dataclasses import dataclass
+from db import *
 
-
-class Location(metaclass=abc.ABCMeta):
-    def __init__(self,location,coordinates):
-        self.location=location
-        self.coordinates=coordinates
-    @abc.abstractmethod
-    def get_csv_line(self):
-        return f'{self.location}, {self.coordinates}'
-    
-    
-class City(Location):
-    #TODO CATCH ERRORS
+@dataclass
+class Location():
+    location:str
+    coordinates:(int,int)
+    def __str__(self):
+        return f'Location:{self.location}, coordinates:{self.coordinates}'
+class City():
     def __init__(self,location,coordinates,**loActivity):
-        super().__init__(location,coordinates)
+        self.location=Location(location,coordinates)
         if(type(loActivity)==list):
             self.loActivity=loActivity
         else:
-            self.loActivity=list()
-            
+            self.loActivity=list()   
     def append_activity(self,activity):   
         self.loActivity.append(activity)
+    @staticmethod
+    def from_json(doc)->object:
+        pass
+    def to_json(cls)->str:
+        tmp=','.join([str(x) for x in cls.loActivity])
+        return f'{str(cls.location)}, Activity:{tmp} '
 
                         
-class Activity(Location):
-    #TODO CATCH ERRORS
+class Activity():
     def __init__(self,title,coordinates,cost,):
-        super().__init__(title,coordinates)
         self.cost=cost
-
-    @staticmethod
-    def from_csv(csv_line):
-        #Throw catche rrror here
-        line=[x.strip() for x in csv_line.split(', ')]
-        try:
-            return Activity(*line)
-        except Exception as e:
-            print(f'Failed loading {line}')
-            print(e)
-        
+        self.location=Location(title,coordinates)
+    def __str__(self):
+        return f'{self.location}, cost:{self.cost}'
+    
+class Model():
+    def __init__(self) -> None:
+        self.db = ItineraryDB()
+    def list_handler(cls,country=None,city=None):
+        if not country:
+            return cls.db.get_countries()
+        elif city:
+            cls.db.get_city(country,city)
+        else:
+            cls.db.get_cities(country)
+    def add_handler(cls,country,city):
+        cls.db.add_city(country,city)
+    def update_handler(cls):
+        cls.model.update_handler()
+    def delete_handler(cls):
+        cls.model.delete_handler()

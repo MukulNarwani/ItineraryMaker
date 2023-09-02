@@ -15,10 +15,10 @@ class ItineraryDB():
         self.database= self.client['Itinerary']
       
     #--create
-    def add_country(self,country):
-        self.database.createCollection(country.strip().lower())
-    def add_city(self,city):
-        self.database.insert_one(city.document)
+    # def add_country(self,country):
+    #     self.database.createCollection(country.strip().lower())
+    def add_city(self,country,city):
+        self.database[country].insert_one(city.to_json)
     #--read
     def get_countries(self):
         return self.database.collection_names()

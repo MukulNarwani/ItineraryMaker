@@ -23,7 +23,12 @@ class controller():
                 case _:
                     cls.view.error('unmatch',event)
     def list_handler(cls):
-        cls.model.list_handler()
+        try:
+            list_obj=cls.view.list_objective()
+        except:
+            cls.view.error('unmatch',list_obj)
+            pass
+        cls.model.list_handler(**list_obj)
     def add_handler(cls):
         cls.model.add_handler()
     def update_handler(cls):
