@@ -8,11 +8,7 @@ class controller():
         self.view=view
         self.start_app()
 
-    def start_app(cls):
-        # event=cls.view.start()
-        # if event == 'add':
-        #     cls.view.add
-        # elif event=='edit':
+    def start_app(cls) -> None:
         while(input("Quit? (y/n) ") =='n' ):
             event=cls.view.start()
             match event:
@@ -24,14 +20,16 @@ class controller():
                     cls.update_handler()
                 case 'delete':
                     cls.delete_handler()
-    def list_handler():
-        pass
-    def add_handler():
-        pass
-    def update_handler():
-        pass
-    def delete_handler():
-        pass
+                case _:
+                    cls.view.error('unmatch',event)
+    def list_handler(cls):
+        cls.model.list_handler()
+    def add_handler(cls):
+        cls.model.add_handler()
+    def update_handler(cls):
+        cls.model.update_handler()
+    def delete_handler(cls):
+        cls.model.delete_handler()
 #Netcontroller
 
 
