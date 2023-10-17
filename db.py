@@ -1,9 +1,6 @@
-import mysql.connector
-from mysql.connector import Error
 import csv 
 import os
 import glob
-from model import *
 from pymongo import MongoClient
 
 
@@ -15,33 +12,36 @@ class ItineraryDB():
         self.database= self.client['Itinerary']
       
     #--create
-    # def add_country(self,country):
-    #     self.database.createCollection(country.strip().lower())
-    def add_city(self,country,city):
-        self.database[country].insert_one(city.to_json)
+    def add_country(cls,country):
+        collection=cls.database[country.strip().lower()]
+        cls.database['notswitzerlans']
+    def add_city(cls,country,city_json):
+        cls.database[country].insert_one(city_json)
     #--read
-    def get_countries(self):
-        return self.database.collection_names()
+    def get_countries(cls):
+        return cls.database.list_collections()
     
-    def get_cities(self,country):
-        if not(country in self.get_countries()):
-            raise ValueError(f'{country} not in Countries ') 
-        #[x['City'] for x in list(self.database[country].find())]
-        return list(self.database[country].find())
+    def get_cities(cls,country):
+        # if not(country in cls.get_countries()):
+        #     raise ValueError(f'{country} not in Countries ') 
+        #[x['City'] for x in list(cls.database[country].find())]
+        return list(cls.database[country].find())
     
-    def get_city(self,country,city):
+    def get_city(cls,country,city):
         #TODO: Check exists?
-        return list(self.database[country].find({'City':city}))
+        return  (cls.database[country].find({'title':city}))
     #--update
-    def update_city(self,country,city):
-        if not(country in self.get_countries()):
+    def update_city(cls,country,city):
+        if not(country in cls.get_countries()):
             raise ValueError(f'{country} not in Countries ') 
-        self.database[country].find_one_and_update({'City':city.location},
+        cls.database[country].find_one_and_update({'City':city.location},
                                                    {'$set':{'coordinates':city.coordinates,'activities':city.activities}},
                                                    projection = { "coordinates" : 1, "activities" : 1 })
     #--delete
-    # delete country
-    # delete city 
+    def delete_country(cls,country):
+        cls.database.drop(country)
+    def delete_city(cls,country,city):
+        cls.database[country].deleteOne(city)
     
 #TODO Class TransportDB?
 #TODO Class layers?
