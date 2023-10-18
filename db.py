@@ -13,8 +13,7 @@ class ItineraryDB():
       
     #--create
     def add_country(cls,country):
-        collection=cls.database[country.strip().lower()]
-        cls.database['notswitzerlans']
+        cls.database[country.strip().lower()]
     def add_city(cls,country,city_json):
         cls.database[country].insert_one(city_json)
     #--read

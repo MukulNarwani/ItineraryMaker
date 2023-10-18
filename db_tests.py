@@ -6,14 +6,14 @@ a=ItineraryDB()
 #get cities tests
 # print(list(a.get_cities('Switzerland')))
 #get city tests
+def test_get_countries():
+    print(list(a.get_countries()))
+def test_get_cities():
+    print(list(a.get_cities('Switzerland')))
+    print(list(a.get_cities('NotSwitzerland')))
 def test_get_city():
     print(list(a.get_city('Switzerland','zermatt')))
     print(list(a.get_city('Switzerland','zeswrmatt')))
-def test_get_cities():
-    print(list(a.get_cities('Switzerland')))
-    print(list(a.get_cities('Switzerlandasd')))
-def test_get_countries():
-    print(list(a.get_countries()))
 
 
 def test_add_country():
@@ -34,4 +34,4 @@ def test_add_cit_many_activities():
     print(list(a.get_cities('NotSwitzerland')))
 
 if __name__=="__main__":
-    test_add_cit_many_activities()
+    test_get_cities()

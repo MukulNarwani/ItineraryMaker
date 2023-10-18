@@ -64,11 +64,12 @@ class Country:
     
     
     def __init__(self,cities: str) -> None:
+        self.cities=[]
         self.parse_json(cities)
     def parse_json(self,json_str):
         json_cities=json.loads(json_str)
         for city in json_cities:
-            City.from_dic(city)
+            self.cities.append(City.from_dic(city))
     
 class Model():
 
