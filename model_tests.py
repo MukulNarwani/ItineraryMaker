@@ -124,7 +124,7 @@ class TestCity():
     # def test_city_init(self):
     def test_normal_city_init(self):
         city1 = city_helper()
-        assert str(city1) == 'City: Location: city, coordinates:(0, 0), '\
+        assert str(city1) == 'city: coordinates: (0, 0), '\
                              'Activities: '\
                              '[Location: normal_activity, coordinates:(1, 2), cost:10, '\
                              'Location: secondactivity, coordinates:(100, 100), cost:10]'
@@ -133,12 +133,12 @@ class TestCity():
         location = location_helper()
         city2 = City(location.title, location.coordinates, activity_helper())
 
-        assert str(city2) == 'City: Location: location1, coordinates:(1, 2), '\
+        assert str(city2) == 'location1: coordinates: (1, 2), '\
             'Activities: [Location: normal_activity, coordinates:(1, 2), cost:10]'
 
     def test_city_init_no_activity(self):
         city3 = City('location1', (1, 2), None)
-        assert str(city3) == 'City: Location: location1, coordinates:(1, 2), '\
+        assert str(city3) == 'location1: coordinates: (1, 2), '\
                              'Activities: [None]'
 
     def test_city_init_no_location(self):
@@ -149,15 +149,15 @@ class TestCity():
         city5 = city_helper()
         activity = Activity('thirdactivity', (100, 100), 10)
         city5.append_activity(activity)
-        assert str(city5) == 'City: Location: city, coordinates:(0, 0), '\
+        assert str(city5) == 'city: coordinates: (0, 0), '\
             'Activities: [Location: normal_activity, coordinates:(1, 2), cost:10, '\
             'Location: secondactivity, coordinates:(100, 100), cost:10, '\
             'Location: thirdactivity, coordinates:(100, 100), cost:10]'
 
     def test_city_todict(self):
         city6 = dict(city_helper())
-        assert city6 == {'City':
-                         {'Location': {'title': 'city', 'coordinates': (0, 0)},
+        assert city6 == {'city':
+                         {'Coordinates': (0, 0),
                           'Activities': [
                              {'location': {'title': 'normal_activity',
                                            'coordinates': (1, 2)}, 'cost': 10},
@@ -171,8 +171,8 @@ class TestCity():
     # TODO Potentially wrong
     def test_city_to_json(self):
         city9 = city_helper().to_json()
-        assert city9 == {'City':
-                         {'Location': {'title': 'city', 'coordinates': [0, 0]},
+        assert city9 == {'city':
+                         {'Coordinates': [0, 0],
                           'Activities': [
                              {'location': {'title': 'normal_activity',
                                            'coordinates': [1, 2]}, 'cost': 10},

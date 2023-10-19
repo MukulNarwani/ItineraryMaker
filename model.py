@@ -81,12 +81,14 @@ class City():
     def __repr__(cls):
         activities_str = ', '.join([str(activity)
                                     for activity in cls.loActivity])
-        return f'City: {cls.location}, Activities: [{activities_str}]'
+        return f'{cls.location.title}: coordinates: {cls.location.coordinates}, Activities: [{activities_str}]'
 
     def __dict__(cls):
-        return {'City': {'Location': dict(cls.location),
-                         'Activities': [dict(activity)
-                                        for activity in cls.loActivity]}}
+        # loc=dict(cls.location)
+        loc = cls.location
+        return {loc.title: {'Coordinates': loc.coordinates,
+                            'Activities': [dict(activity)
+                                           for activity in cls.loActivity]}}
 
     def __iter__(self):
         for key, value in self.__dict__().items():
@@ -95,11 +97,11 @@ class City():
     @staticmethod
     def from_dic(doc) -> object:
         activities = []
-        doc = doc['City']
-        loc = doc['Location']
-        for activity in doc['Activities']:
+        title = list(doc.keys())[0]
+        city = doc[title]
+        for activity in city['Activities']:
             activities.append(Activity.from_dic(activity))
-        return City(loc['title'], loc['coordinates'], activities)
+        return City(title, city['Coordinates'], activities)
 
     def to_json(cls) -> str:
         return json.loads(json.dumps(dict(cls)))
@@ -116,6 +118,18 @@ class Country:
         for city in json_cities:
             self.cities.append(City.from_dic(city))
 
+    def update_city(self):
+        # TODO
+        pass
+
+    def delete_city(self):
+        # TODO
+        pass
+
+    @staticmethod
+    def from_dic(doc) -> object:
+        pass
+
 
 class Model():
 
@@ -127,7 +141,7 @@ class Model():
         if (country in cls.db.get_countries()):
             # load country
             cities = cls.db.get_cities(country)
-            Country(cities)
+            Country.from_dic
         else:
             cls.db.add_country(country)
 
